@@ -1,13 +1,887 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="id">
+  <style>
+    :root {
+      --primary-color: #6a11cb;
+      --secondary-color: #2575fc;
+      --background-color: #f0f2f5;
+      --card-background: #ffffff;
+      --text-color: #333;
+      --text-light: #666;
+      --border-color: #e0e0e0;
+      --shadow: 0 6px 20px rgba(0, 0, 0, 0.07);
+      --border-radius: 16px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      background-color: var(--background-color);
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    /* Lock Screen */
+    .lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .lock-box {
+      background: var(--card-background);
+      padding: 40px;
+      border-radius: var(--border-radius);
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+    .lock-box h2 {
+      color: var(--primary-color);
+    }
+    .lock-box input {
+      display: block;
+      width: 100%;
+      margin: 20px 0;
+      padding: 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    .lock-box button {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(
+        45deg,
+        var(--primary-color),
+        var(--secondary-color)
+      );
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .app-container {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 20px;
+      display: grid;
+      gap: 25px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .card {
+      background-color: var(--card-background);
+      border-radius: var(--border-radius);
+      padding: 25px;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s ease;
+    }
+
+    .app-header {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .app-header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: -webkit-linear-gradient(
+        45deg,
+        var(--primary-color),
+        var(--secondary-color)
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Summary & Goal */
+    #goal-input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 1.2rem;
+      text-align: center;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    .progress-container {
+      background-color: #e9ecef;
+      border-radius: 20px;
+      height: 20px;
+      width: 100%;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(
+        90deg,
+        var(--secondary-color),
+        var(--primary-color)
+      );
+      border-radius: 20px;
+      transition: width 0.5s ease-in-out;
+    }
+    .summary-details {
+      display: flex;
+      justify-content: space-between;
+      text-align: center;
+    }
+    .summary-details span {
+      font-size: 0.9rem;
+      color: var(--text-light);
+    }
+    .summary-details strong {
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: var(--primary-color);
+    }
+
+    /* Analytics Dashboard */
+    .analytics-content {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .chart-container {
+      width: 150px;
+      height: 150px;
+    }
+    .stats-container {
+      flex-grow: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    .stat-item span {
+      font-size: 0.9rem;
+      color: var(--text-light);
+    }
+    .stat-item strong {
+      font-size: 1.2rem;
+      font-weight: 600;
+      display: block;
+    }
+
+    /* Main Actions */
+    .btn-primary {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(
+        45deg,
+        var(--primary-color),
+        var(--secondary-color)
+      );
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    }
+
+    /* History */
+    #history-list {
+      list-style-type: none;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .history-item {
+      display: flex;
+      align-items: center;
+      padding: 15px 10px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .history-item:last-child {
+      border-bottom: none;
+    }
+    .history-item-icon {
+      font-size: 1.5rem;
+      margin-right: 15px;
+    }
+    .history-item-details {
+      flex-grow: 1;
+    }
+    .history-item-desc {
+      font-weight: 600;
+    }
+    .history-item-meta {
+      font-size: 0.8rem;
+      color: var(--text-light);
+    }
+    .history-item-amount {
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+    .Dhanu .history-item-amount {
+      color: var(--primary-color);
+    }
+    .Maha .history-item-amount {
+      color: var(--secondary-color);
+    }
+    .delete-btn {
+      background: transparent;
+      border: none;
+      color: #ff6b6b;
+      font-size: 1.2rem;
+      cursor: pointer;
+      margin-left: 20px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .history-item:hover .delete-btn {
+      opacity: 1;
+    }
+
+    .proof-link {
+      background-color: #e7f3ff;
+      color: #0d6efd;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      text-decoration: none;
+      font-weight: 600;
+      margin-left: 10px;
+      white-space: nowrap;
+    }
+    .proof-link:hover {
+      background-color: #cce3ff;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 100;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(5px);
+    }
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 30px;
+      border: 1px solid #888;
+      width: 90%;
+      max-width: 500px;
+      border-radius: var(--border-radius);
+      position: relative;
+      animation: slideIn 0.4s ease;
+    }
+    .close-button {
+      color: #aaa;
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    @keyframes slideIn {
+      from {
+        transform: translateY(-50px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    /* Form inside Modal */
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      font-size: 1rem;
+      font-family: "Poppins", sans-serif;
+    }
+    .file-input {
+      width: 100%;
+      padding: 10px;
+      border: 1px dashed var(--border-color);
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .file-input::file-selector-button {
+      margin-right: 10px;
+      border: none;
+      background: var(--primary-color);
+      padding: 8px 12px;
+      border-radius: 4px;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s ease-in-out;
+    }
+    .file-input::file-selector-button:hover {
+      background: var(--secondary-color);
+    }
+    .contributor-selector .radio-group {
+      display: flex;
+      gap: 10px;
+    }
+    .contributor-selector input[type="radio"] {
+      display: none;
+    }
+    .contributor-selector label {
+      flex: 1;
+      text-align: center;
+      padding: 10px;
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    input[value="Dhanu"]:checked + label {
+      background-color: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+    }
+    input[value="Maha"]:checked + label {
+      background-color: var(--secondary-color);
+      color: white;
+      border-color: var(--secondary-color);
+    }
+
+    @media (max-width: 600px) {
+      .analytics-content {
+        flex-direction: column;
+      }
+      .stats-container {
+        width: 100%;
+      }
+      .modal-content {
+        margin: 20% auto;
+      }
+    }
+  </style>
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
+    <title>Tabungan Impian | Dhanu & Maha</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <div id="lock-screen" class="lock-screen">
+      <div class="lock-box">
+        <h2>🔐 Tabungan Impian</h2>
+        <p>Masukkan kunci rahasia untuk membuka.</p>
+        <input
+          type="password"
+          id="password-input"
+          placeholder="Kunci Rahasia"
+        />
+        <button id="unlock-button">Buka</button>
+      </div>
+    </div>
+
+    <div id="app-container" class="app-container hidden">
+      <header class="app-header">
+        <h1>💍 Tabungan Impian</h1>
+        <p>Perjalanan finansial Dhanu & Maha.</p>
+      </header>
+
+      <div class="card summary-card">
+        <h2>Target Utama</h2>
+        <div class="goal-section">
+          <input
+            type="number"
+            id="goal-input"
+            placeholder="Contoh: 100000000"
+          />
+        </div>
+        <div class="progress-container">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="summary-details">
+          <div class="total-saved">
+            <span>Terkumpul</span>
+            <strong id="total-saved">Rp 0</strong>
+          </div>
+          <div class="goal-remaining">
+            <span>Sisa Target</span>
+            <strong id="goal-remaining">Rp 0</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="card analytics-dashboard">
+        <h2>Dashboard Analitik</h2>
+        <div class="analytics-content">
+          <div class="chart-container">
+            <canvas id="contribution-chart"></canvas>
+          </div>
+          <div class="stats-container">
+            <div class="stat-item">
+              <span>Kontribusi Dhanu</span>
+              <strong id="person1-total">Rp 0</strong>
+            </div>
+            <div class="stat-item">
+              <span>Kontribusi Maha</span>
+              <strong id="person2-total">Rp 0</strong>
+            </div>
+            <div class="stat-item">
+              <span>Total Transaksi</span>
+              <strong id="total-transactions">0</strong>
+            </div>
+            <div class="stat-item">
+              <span>Rata-rata Nabung</span>
+              <strong id="average-saving">Rp 0</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="main-actions">
+        <button id="add-transaction-btn" class="btn-primary">
+          ✨ Tambah Tabungan
+        </button>
+      </div>
+
+      <div class="card history-card">
+        <h2>Histori Transaksi</h2>
+        <ul id="history-list"></ul>
+      </div>
+    </div>
+
+    <div id="transaction-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <h2>Tambah Transaksi Baru</h2>
+        <form id="transaction-form">
+          <div class="form-group">
+            <label for="amount">Jumlah (Rp)</label>
+            <input
+              type="number"
+              id="amount"
+              placeholder="Contoh: 100000"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="description">Deskripsi</label>
+            <input
+              type="text"
+              id="description"
+              placeholder="Gaji bulan ini, bonus, dll."
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="category">Kategori</label>
+            <select id="category" required>
+              <option value="Gaji">Gaji</option>
+              <option value="Bonus">Bonus</option>
+              <option value="Usaha Sampingan">Usaha Sampingan</option>
+              <option value="Hadiah">Hadiah</option>
+              <option value="Lainnya">Lainnya</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="proof-input">Bukti Nabung (Opsional)</label>
+            <input
+              type="file"
+              id="proof-input"
+              class="file-input"
+              accept="image/*"
+            />
+          </div>
+          <div class="form-group contributor-selector">
+            <label>Siapa yang menabung?</label>
+            <div class="radio-group">
+              <input
+                type="radio"
+                id="person1"
+                name="contributor"
+                value="Dhanu"
+                checked
+              />
+              <label for="person1">Dhanu</label>
+              <input
+                type="radio"
+                id="person2"
+                name="contributor"
+                value="Maha"
+              />
+              <label for="person2">Maha</label>
+            </div>
+          </div>
+          <button type="submit" class="btn-primary" id="submit-button">
+            Simpan Transaksi
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script>
+      // =================================================================
+      //                      KONFIGURASI WAJIB
+      // =================================================================
+
+      // PASTE KONFIGURASI FIREBASE ANDA DI SINI
+      const firebaseConfig = {
+        apiKey: "AIzaSyCTknZNCMA5O_4zVh34X6ipL9a_PM10W8A",
+        authDomain: "tabunganmasadepan-f5281.firebaseapp.com",
+        projectId: "tabunganmasadepan-f5281",
+        storageBucket: "tabunganmasadepan-f5281.firebasestorage.app",
+        messagingSenderId: "840218167094",
+        appId: "1:840218167094:web:3490fe88a27b0793f19597",
+        measurementId: "G-PXQXPENWHH",
+      };
+
+      // 2. KONFIGURASI GITHUB (SANGAT TIDAK AMAN UNTUK DITARUH DI SINI)
+      const GITHUB_CONFIG = {
+        owner: "wyandhanupapoy", // Contoh: "dhanu-dev"
+        repo: "bukti-tabungan", // Contoh: "tabungan-impian"
+        // TOKEN INI AKAN TERLIHAT OLEH SEMUA ORANG. SANGAT BERBAHAYA!
+        token: "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",
+      };
+
+      // 3. UBAH KUNCI RAHASIA BERSAMA ANDA DAN PASANGAN DI SINI
+      const SHARED_KEY = "kitabisa";
+
+      // =================================================================
+      //                      KODE APLIKASI (VERSI PERBAIKAN)
+      // =================================================================
+
+      // Inisialisasi Firebase
+      const app = firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+
+      document.addEventListener("DOMContentLoaded", () => {
+        // === PEMILIHAN ELEMEN DOM (Tidak ada perubahan) ===
+        const lockScreen = document.getElementById("lock-screen");
+        const passwordInput = document.getElementById("password-input");
+        const unlockButton = document.getElementById("unlock-button");
+        const appContainer = document.getElementById("app-container");
+        const goalInput = document.getElementById("goal-input");
+        const progressBar = document.getElementById("progress-bar");
+        const totalSavedEl = document.getElementById("total-saved");
+        const goalRemainingEl = document.getElementById("goal-remaining");
+        const contributionChartCanvas =
+          document.getElementById("contribution-chart");
+        const person1TotalEl = document.getElementById("person1-total");
+        const person2TotalEl = document.getElementById("person2-total");
+        const totalTransactionsEl =
+          document.getElementById("total-transactions");
+        const averageSavingEl = document.getElementById("average-saving");
+        const historyList = document.getElementById("history-list");
+        const addTransactionBtn = document.getElementById(
+          "add-transaction-btn"
+        );
+        const modal = document.getElementById("transaction-modal");
+        const closeModalBtn = document.querySelector(".close-button");
+        const transactionForm = document.getElementById("transaction-form");
+        const amountInput = document.getElementById("amount");
+        const descriptionInput = document.getElementById("description");
+        const categoryInput = document.getElementById("category");
+        const proofInput = document.getElementById("proof-input");
+        const submitButton = document.getElementById("submit-button");
+
+        // === FUNGSI-FUNGSI LOGIKA (Tidak ada perubahan) ===
+        let currentGoal = 100000000;
+        let allTransactions = [];
+        let contributionChart;
+        const formatCurrency = (amount) =>
+          new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
+            minimumFractionDigits: 0,
+          }).format(amount);
+        const renderDashboard = () => {
+          /* ... (fungsi ini tetap sama persis) ... */
+          const totalSaved = allTransactions.reduce(
+            (sum, t) => sum + t.amount,
+            0
+          );
+          const dhanuTotal = allTransactions
+            .filter((t) => t.who === "Dhanu")
+            .reduce((sum, t) => sum + t.amount, 0);
+          const mahaTotal = allTransactions
+            .filter((t) => t.who === "Maha")
+            .reduce((sum, t) => sum + t.amount, 0);
+          const goalRemaining = currentGoal - totalSaved;
+          const progressPercentage =
+            totalSaved >= currentGoal ? 100 : (totalSaved / currentGoal) * 100;
+          goalInput.value = currentGoal;
+          totalSavedEl.textContent = formatCurrency(totalSaved);
+          goalRemainingEl.textContent = formatCurrency(
+            goalRemaining > 0 ? goalRemaining : 0
+          );
+          progressBar.style.width = `${progressPercentage}%`;
+          person1TotalEl.textContent = formatCurrency(dhanuTotal);
+          person2TotalEl.textContent = formatCurrency(mahaTotal);
+          totalTransactionsEl.textContent = allTransactions.length;
+          averageSavingEl.textContent =
+            allTransactions.length > 0
+              ? formatCurrency(totalSaved / allTransactions.length)
+              : formatCurrency(0);
+          updateChart(dhanuTotal, mahaTotal);
+          renderHistory();
+        };
+        const updateChart = (dhanuTotal, mahaTotal) => {
+          /* ... (fungsi ini tetap sama persis) ... */
+          const data = {
+            labels: ["Dhanu", "Maha"],
+            datasets: [
+              {
+                data: [dhanuTotal, mahaTotal],
+                backgroundColor: ["#6a11cb", "#2575fc"],
+                borderColor: "#ffffff",
+                borderWidth: 2,
+              },
+            ],
+          };
+          if (contributionChart) {
+            contributionChart.data = data;
+            contributionChart.update();
+          } else {
+            contributionChart = new Chart(contributionChartCanvas, {
+              type: "doughnut",
+              data: data,
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                cutout: "70%",
+              },
+            });
+          }
+        };
+        const renderHistory = () => {
+          /* ... (fungsi ini tetap sama persis) ... */
+          historyList.innerHTML = "";
+          if (allTransactions.length === 0) {
+            historyList.innerHTML = `<li class="history-item">Belum ada tabungan. Mulai sekarang!</li>`;
+            return;
+          }
+          const sorted = [...allTransactions].sort(
+            (a, b) => b.date.seconds - a.date.seconds
+          );
+          sorted.forEach((t) => {
+            const item = document.createElement("li");
+            item.className = `history-item ${t.who}`;
+            const formattedDate = new Date(
+              t.date.seconds * 1000
+            ).toLocaleDateString("id-ID", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+            });
+            const icon = t.who === "Dhanu" ? "🙋‍♂️" : "🙋‍♀️";
+            const proofLink = t.proofUrl
+              ? `<a href="${t.proofUrl}" target="_blank" class="proof-link">Lihat Bukti</a>`
+              : "";
+            item.innerHTML = `<div class="history-item-icon">${icon}</div> <div class="history-item-details"> <div class="history-item-desc">${
+              t.description
+            }</div> <div class="history-item-meta">${
+              t.category
+            } • ${formattedDate}</div> </div> <span class="history-item-amount">${formatCurrency(
+              t.amount
+            )}</span> ${proofLink} <button class="delete-btn" data-id="${
+              t.id
+            }" title="Hapus">&times;</button>`;
+            historyList.appendChild(item);
+          });
+        };
+        const setupRealtimeListeners = () => {
+          /* ... (fungsi ini tetap sama persis) ... */
+          db.collection("transactions").onSnapshot((snapshot) => {
+            allTransactions = snapshot.docs.map((doc) => ({
+              id: doc.id,
+              ...doc.data(),
+            }));
+            renderDashboard();
+          });
+          db.collection("settings")
+            .doc("mainGoal")
+            .onSnapshot((doc) => {
+              if (doc.exists) {
+                currentGoal = doc.data().amount;
+                renderDashboard();
+              } else {
+                db.collection("settings")
+                  .doc("mainGoal")
+                  .set({ amount: currentGoal });
+              }
+            });
+        };
+        const handleUnlock = () => {
+          /* ... (fungsi ini tetap sama persis) ... */
+          if (passwordInput.value === SHARED_KEY) {
+            lockScreen.style.display = "none";
+            appContainer.classList.remove("hidden");
+            setupRealtimeListeners();
+          } else {
+            alert("Kunci rahasia salah!");
+          }
+        };
+
+        // === EVENT LISTENERS (hanya logika submit form yang berubah) ===
+        unlockButton.addEventListener("click", handleUnlock);
+        passwordInput.addEventListener("keypress", (e) => {
+          if (e.key === "Enter") handleUnlock();
+        });
+        goalInput.addEventListener("change", (e) => {
+          const newGoal = parseFloat(e.target.value);
+          if (!isNaN(newGoal) && newGoal > 0) {
+            db.collection("settings").doc("mainGoal").set({ amount: newGoal });
+          }
+        });
+        addTransactionBtn.addEventListener(
+          "click",
+          () => (modal.style.display = "block")
+        );
+        closeModalBtn.addEventListener(
+          "click",
+          () => (modal.style.display = "none")
+        );
+        window.addEventListener("click", (e) => {
+          if (e.target == modal) modal.style.display = "none";
+        });
+
+        // === PERBAIKAN UTAMA: Logika Submit Transaksi dengan Upload ke GitHub ===
+        transactionForm.addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const amount = parseFloat(amountInput.value);
+          const description = descriptionInput.value.trim();
+          const contributor = document.querySelector(
+            'input[name="contributor"]:checked'
+          ).value;
+          const proofFile = proofInput.files[0];
+
+          if (isNaN(amount) || amount <= 0 || description === "") {
+            alert("Mohon isi semua data dengan benar.");
+            return;
+          }
+
+          submitButton.disabled = true;
+          submitButton.textContent = "Mengunggah...";
+
+          let proofUrl = null;
+
+          if (proofFile) {
+            try {
+              const base64Content = await new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result.split(",")[1]);
+                reader.onerror = (error) => reject(error);
+                reader.readAsDataURL(proofFile);
+              });
+
+              const fileName = `${Date.now()}-${proofFile.name.replace(
+                /\s/g,
+                "-"
+              )}`;
+              const apiUrl = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/bukti/${fileName}`;
+
+              const response = await fetch(apiUrl, {
+                method: "PUT",
+                headers: {
+                  Authorization: `token ${GITHUB_CONFIG.token}`,
+                  Accept: "application/vnd.github.v3+json",
+                },
+                body: JSON.stringify({
+                  message: `Upload bukti: ${fileName}`,
+                  content: base64Content,
+                  branch: "main", // Pastikan ini nama branch utama Anda (main atau master)
+                }),
+              });
+
+              const result = await response.json();
+              if (response.ok) {
+                // Gunakan URL yang bisa langsung diakses, bukan download_url
+                proofUrl = `https://raw.githubusercontent.com/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/main/bukti/${fileName}`;
+                console.log("Upload berhasil. URL:", proofUrl);
+              } else {
+                // Beri tahu pengguna jika ada error dari GitHub
+                throw new Error(`GitHub API Error: ${result.message}`);
+              }
+            } catch (error) {
+              console.error("Gagal upload gambar ke GitHub:", error);
+              alert(
+                `Gagal mengunggah bukti: ${error.message}. Transaksi akan disimpan tanpa bukti.`
+              );
+            }
+          }
+
+          submitButton.textContent = "Menyimpan...";
+          try {
+            await db.collection("transactions").add({
+              amount,
+              description,
+              proofUrl, // Simpan URL dari GitHub
+              category: categoryInput.value,
+              who: contributor,
+              date: firebase.firestore.FieldValue.serverTimestamp(),
+            });
+          } catch (error) {
+            console.error("Gagal menyimpan ke Firestore:", error);
+            alert("Terjadi kesalahan saat menyimpan data!");
+          } finally {
+            transactionForm.reset();
+            modal.style.display = "none";
+            submitButton.disabled = false;
+            submitButton.textContent = "Simpan Transaksi";
+          }
+        });
+
+        historyList.addEventListener("click", (e) => {
+          /* ... (fungsi ini tetap sama persis) ... */
+          if (e.target.classList.contains("delete-btn")) {
+            const transactionId = e.target.dataset.id;
+            if (confirm("Yakin ingin menghapus tabungan ini?")) {
+              db.collection("transactions").doc(transactionId).delete();
+            }
+          }
+        });
+      });
+    </script>
   </body>
 </html>
