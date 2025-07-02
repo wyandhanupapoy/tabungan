@@ -6,11 +6,12 @@
       --secondary-color: #2575fc;
       --background-color: #f0f2f5;
       --card-background: #ffffff;
-      --text-color: #333;
-      --text-light: #666;
+      --text-color: #2d2d2d;
+      --text-light: #5c5c5c;
       --border-color: #e0e0e0;
-      --shadow: 0 6px 20px rgba(0, 0, 0, 0.07);
-      --border-radius: 16px;
+      --shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      --border-radius: 20px;
+      --star-color: #ffd700;
     }
 
     * {
@@ -21,9 +22,43 @@
 
     body {
       font-family: "Poppins", sans-serif;
-      background-color: var(--background-color);
+      background: linear-gradient(135deg, #f0f2f5 0%, #e8e9ff 100%);
       color: var(--text-color);
       line-height: 1.6;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Falling Stars Animation */
+    .stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .star {
+      position: absolute;
+      background: var(--star-color);
+      width: 2px;
+      height: 2px;
+      border-radius: 50%;
+      opacity: 0.8;
+      animation: fall 3s linear infinite;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-100vh) rotate(0deg);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
     }
 
     /* Lock Screen */
@@ -33,53 +68,79 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(10px);
+      background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(50, 50, 100, 0.7));
+      backdrop-filter: blur(12px);
       display: flex;
       justify-content: center;
       align-items: center;
       z-index: 1000;
+      animation: fadeIn 1s ease-in;
     }
+
     .lock-box {
       background: var(--card-background);
-      padding: 40px;
+      padding: 48px;
       border-radius: var(--border-radius);
       text-align: center;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+      transform: scale(0.95);
+      animation: popIn 0.5s ease-out forwards;
     }
+
     .lock-box h2 {
       color: var(--primary-color);
+      font-size: 2rem;
+      margin-bottom: 20px;
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
+
     .lock-box input {
       display: block;
       width: 100%;
       margin: 20px 0;
-      padding: 12px;
+      padding: 14px;
       border: 1px solid var(--border-color);
-      border-radius: 8px;
+      border-radius: 10px;
       font-size: 1rem;
+      background: #f9f9f9;
+      transition: border-color 0.3s ease, transform 0.3s ease;
     }
+
+    .lock-box input:focus {
+      border-color: var(--primary-color);
+      transform: scale(1.02);
+      outline: none;
+    }
+
     .lock-box button {
       width: 100%;
-      padding: 12px;
-      background: linear-gradient(
-        45deg,
-        var(--primary-color),
-        var(--secondary-color)
-      );
+      padding: 14px;
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
       color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
       font-weight: 600;
+      font-size: 1.1rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .lock-box button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
     }
 
     .app-container {
-      max-width: 800px;
-      margin: 30px auto;
-      padding: 20px;
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 30px;
       display: grid;
-      gap: 25px;
+      gap: 30px;
+      animation: fadeInUp 0.8s ease-out;
+      position: relative;
+      z-index: 1;
     }
 
     .hidden {
@@ -87,188 +148,314 @@
     }
 
     .card {
-      background-color: var(--card-background);
+      background: var(--card-background);
       border-radius: var(--border-radius);
-      padding: 25px;
+      padding: 30px;
       box-shadow: var(--shadow);
-      transition: transform 0.3s ease;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
     }
 
     .app-header {
       text-align: center;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
     }
+
     .app-header h1 {
-      font-size: 2.5rem;
+      font-size: 3rem;
       font-weight: 700;
-      background: -webkit-linear-gradient(
-        45deg,
-        var(--primary-color),
-        var(--secondary-color)
-      );
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      animation: pulseText 2s infinite;
+    }
+
+    .app-header p {
+      color: var(--text-light);
+      font-size: 1.2rem;
+    }
+
+    @keyframes pulseText {
+      0% { opacity: 1; }
+      50% { opacity: 0.7; }
+      100% { opacity: 1; }
     }
 
     /* Summary & Goal */
     #goal-input {
       width: 100%;
-      padding: 12px;
+      padding: 14px;
       border: 1px solid var(--border-color);
-      border-radius: 8px;
-      font-size: 1.2rem;
+      border-radius: 10px;
+      font-size: 1.3rem;
       text-align: center;
       font-weight: 600;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
+      background: #f9f9f9;
+      transition: border-color 0.3s ease, transform 0.3s ease;
     }
+
+    #goal-input:focus {
+      border-color: var(--primary-color);
+      transform: scale(1.02);
+      outline: none;
+    }
+
     .progress-container {
       background-color: #e9ecef;
-      border-radius: 20px;
-      height: 20px;
+      border-radius: 25px;
+      height: 25px;
       width: 100%;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
       overflow: hidden;
+      position: relative;
     }
+
     .progress-bar {
       height: 100%;
       width: 0%;
-      background: linear-gradient(
-        90deg,
-        var(--secondary-color),
-        var(--primary-color)
-      );
-      border-radius: 20px;
-      transition: width 0.5s ease-in-out;
+      background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
+      border-radius: 25px;
+      transition: width 0.6s ease-in-out;
+      position: relative;
+      overflow: hidden;
     }
+
+    .progress-bar::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        45deg,
+        rgba(255, 255, 255, 0.2) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(255, 255, 255, 0.2) 50%,
+        rgba(255, 255, 255, 0.2) 75%,
+        transparent 75%,
+        transparent
+      );
+      background-size: 30px 30px;
+      animation: moveStripes 2s linear infinite;
+    }
+
+    @keyframes moveStripes {
+      0% { background-position: 0 0; }
+      100% { background-position: 60px 0; }
+    }
+
     .summary-details {
       display: flex;
       justify-content: space-between;
       text-align: center;
     }
+
     .summary-details span {
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       color: var(--text-light);
     }
+
     .summary-details strong {
-      font-size: 1.7rem;
+      font-size: 1.8rem;
       font-weight: 700;
       color: var(--primary-color);
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     /* Analytics Dashboard */
     .analytics-content {
       display: flex;
       align-items: center;
-      gap: 20px;
+      gap: 25px;
     }
+
     .chart-container {
-      width: 150px;
-      height: 150px;
+      width: 170px;
+      height: 170px;
+      position: relative;
+      animation: rotateIn 1s ease-out;
     }
+
+    @keyframes rotateIn {
+      from { transform: rotate(-10deg) scale(0.8); opacity: 0; }
+      to { transform: rotate(0deg) scale(1); opacity: 1; }
+    }
+
     .stats-container {
       flex-grow: 1;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 15px;
+      gap: 20px;
     }
+
+    .stat-item {
+      padding: 10px;
+      border-radius: 10px;
+      background: #f9f9f9;
+      transition: transform 0.3s ease;
+    }
+
+    .stat-item:hover {
+      transform: scale(1.05);
+    }
+
     .stat-item span {
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       color: var(--text-light);
     }
+
     .stat-item strong {
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       font-weight: 600;
       display: block;
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     /* Main Actions */
     .btn-primary {
       width: 100%;
-      padding: 15px;
-      background: linear-gradient(
-        45deg,
-        var(--primary-color),
-        var(--secondary-color)
-      );
+      padding: 18px;
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
       color: white;
       border: none;
-      border-radius: 8px;
-      font-size: 1.1rem;
+      border-radius: 10px;
+      font-size: 1.2rem;
       font-weight: 600;
       cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+      position: relative;
+      overflow: hidden;
     }
+
     .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+      background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+    }
+
+    .btn-primary::after {
+      content: '✨';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .btn-primary:hover::after {
+      opacity: 0.3;
     }
 
     /* History */
     #history-list {
       list-style-type: none;
-      max-height: 400px;
+      max-height: 450px;
       overflow-y: auto;
+      padding-right: 10px;
     }
+
     .history-item {
       display: flex;
       align-items: center;
-      padding: 15px 10px;
+      padding: 18px 12px;
       border-bottom: 1px solid var(--border-color);
+      transition: background 0.3s ease, transform 0.3s ease;
+      border-radius: 10px;
+      margin-bottom: 10px;
     }
+
+    .history-item:hover {
+      background: #f9f9f9;
+      transform: translateX(5px);
+    }
+
     .history-item:last-child {
       border-bottom: none;
     }
+
     .history-item-icon {
-      font-size: 1.5rem;
-      margin-right: 15px;
+      font-size: 1.8rem;
+      margin-right: 20px;
+      animation: bounce 2s infinite;
     }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-10px); }
+      60% { transform: translateY(-5px); }
+    }
+
     .history-item-details {
       flex-grow: 1;
     }
+
     .history-item-desc {
       font-weight: 600;
-    }
-    .history-item-meta {
-      font-size: 0.8rem;
-      color: var(--text-light);
-    }
-    .history-item-amount {
-      font-weight: 700;
       font-size: 1.1rem;
     }
+
+    .history-item-meta {
+      font-size: 0.85rem;
+      color: var(--text-light);
+    }
+
+    .history-item-amount {
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+
     .Dhanu .history-item-amount {
       color: var(--primary-color);
     }
+
     .Maha .history-item-amount {
       color: var(--secondary-color);
     }
+
     .delete-btn {
       background: transparent;
       border: none;
       color: #ff6b6b;
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       cursor: pointer;
       margin-left: 20px;
       opacity: 0;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.3s ease, transform 0.3s ease;
     }
+
     .history-item:hover .delete-btn {
       opacity: 1;
+      transform: scale(1.2);
     }
 
     .proof-link {
       background-color: #e7f3ff;
       color: #0d6efd;
-      padding: 4px 10px;
+      padding: 6px 12px;
       border-radius: 20px;
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       text-decoration: none;
       font-weight: 600;
-      margin-left: 10px;
-      white-space: nowrap;
+      margin-left: 12px;
+      transition: background 0.3s ease, transform 0.3s ease;
     }
+
     .proof-link:hover {
       background-color: #cce3ff;
+      transform: scale(1.05);
     }
 
     /* Modal */
@@ -281,32 +468,43 @@
       width: 100%;
       height: 100%;
       overflow: auto;
-      background-color: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(5px);
+      background-color: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      animation: fadeIn 0.5s ease;
     }
+
     .modal-content {
-      background-color: #fefefe;
-      margin: 15% auto;
-      padding: 30px;
-      border: 1px solid #888;
+      background-color: var(--card-background);
+      margin: 10% auto;
+      padding: 35px;
+      border: 1px solid var(--border-color);
       width: 90%;
-      max-width: 500px;
+      max-width: 550px;
       border-radius: var(--border-radius);
       position: relative;
-      animation: slideIn 0.4s ease;
+      animation: slideIn 0.5s ease-out;
+      box-shadow: var(--shadow);
     }
+
     .close-button {
-      color: #aaa;
+      color: var(--text-light);
       position: absolute;
       top: 15px;
       right: 20px;
-      font-size: 28px;
+      font-size: 32px;
       font-weight: bold;
       cursor: pointer;
+      transition: color 0.3s ease, transform 0.3s ease;
     }
+
+    .close-button:hover {
+      color: var(--primary-color);
+      transform: rotate(90deg);
+    }
+
     @keyframes slideIn {
       from {
-        transform: translateY(-50px);
+        transform: translateY(-100px);
         opacity: 0;
       }
       to {
@@ -315,69 +513,121 @@
       }
     }
 
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes popIn {
+      from {
+        transform: scale(0.8);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
     /* Form inside Modal */
     .form-group {
-      margin-bottom: 20px;
+      margin-bottom: 25px;
     }
+
     .form-group label {
       display: block;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       font-weight: 600;
+      color: var(--text-color);
     }
+
     .form-group input,
     .form-group select {
       width: 100%;
-      padding: 12px;
-      border-radius: 8px;
+      padding: 14px;
+      border-radius: 10px;
       border: 1px solid var(--border-color);
       font-size: 1rem;
       font-family: "Poppins", sans-serif;
+      background: #f9f9f9;
+      transition: border-color 0.3s ease, transform 0.3s ease;
     }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: var(--primary-color);
+      transform: scale(1.02);
+      outline: none;
+    }
+
     .file-input {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       border: 1px dashed var(--border-color);
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
+      background: #f9f9f9;
     }
+
     .file-input::file-selector-button {
-      margin-right: 10px;
+      margin-right: 12px;
       border: none;
       background: var(--primary-color);
-      padding: 8px 12px;
-      border-radius: 4px;
+      padding: 10px 14px;
+      border-radius: 6px;
       color: #fff;
       cursor: pointer;
-      transition: background 0.2s ease-in-out;
+      transition: background 0.3s ease, transform 0.3s ease;
     }
+
     .file-input::file-selector-button:hover {
       background: var(--secondary-color);
+      transform: scale(1.05);
     }
+
     .contributor-selector .radio-group {
       display: flex;
-      gap: 10px;
+      gap: 15px;
     }
+
     .contributor-selector input[type="radio"] {
       display: none;
     }
+
     .contributor-selector label {
       flex: 1;
       text-align: center;
-      padding: 10px;
+      padding: 12px;
       border: 2px solid var(--border-color);
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
       transition: all 0.3s ease;
+      font-weight: 600;
     }
+
     input[value="Dhanu"]:checked + label {
-      background-color: var(--primary-color);
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
       color: white;
       border-color: var(--primary-color);
+      transform: scale(1.05);
     }
+
     input[value="Maha"]:checked + label {
-      background-color: var(--secondary-color);
+      background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
       color: white;
       border-color: var(--secondary-color);
+      transform: scale(1.05);
     }
 
     @media (max-width: 600px) {
@@ -386,9 +636,17 @@
       }
       .stats-container {
         width: 100%;
+        grid-template-columns: 1fr;
       }
       .modal-content {
         margin: 20% auto;
+        padding: 20px;
+      }
+      .lock-box {
+        padding: 30px;
+      }
+      .app-header h1 {
+        font-size: 2.2rem;
       }
     }
   </style>
@@ -405,6 +663,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
   <body>
+    <div class="stars" id="stars"></div>
     <div id="lock-screen" class="lock-screen">
       <div class="lock-box">
         <h2>🔐 Tabungan Impian</h2>
@@ -489,7 +748,7 @@
 
     <div id="transaction-modal" class="modal">
       <div class="modal-content">
-        <span class="close-button">&times;</span>
+        <span class="close-button">×</span>
         <h2>Tambah Transaksi Baru</h2>
         <form id="transaction-form">
           <div class="form-group">
@@ -559,40 +818,24 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <script>
-      // =================================================================
-      //                     KONFIGURASI WAJIB
-      // =================================================================
+      // Falling Stars Animation
+      function createStars() {
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 50; i++) {
+          const star = document.createElement('div');
+          star.className = 'star';
+          star.style.left = `${Math.random() * 100}vw`;
+          star.style.animationDelay = `${Math.random() * 5}s`;
+          star.style.animationDuration = `${2 + Math.random() * 3}s`;
+          starsContainer.appendChild(star);
+        }
+      }
 
-      // 1. PASTE KONFIGURASI FIREBASE ANDA DI SINI
-      const firebaseConfig = {
-        apiKey: "AIzaSyCTknZNCMA5O_4zVh34X6ipL9a_PM10W8A",
-        authDomain: "tabunganmasadepan-f5281.firebaseapp.com",
-        projectId: "tabunganmasadepan-f5281",
-        storageBucket: "tabunganmasadepan-f5281.firebasestorage.app",
-        messagingSenderId: "840218167094",
-        appId: "1:840218167094:web:3490fe88a27b0793f19597",
-        measurementId: "G-PXQXPENWHH",
-      };
-
-      // 2. KONFIGURASI CLOUDINARY
-      const CLOUDINARY_CONFIG = {
-        cloudName: "dzoxyqyrl", // Ganti dengan Cloud Name Anda
-        uploadPreset: "bukti_tabungan", // Ganti dengan nama Upload Preset Anda
-      };
-
-      // 3. UBAH KUNCI RAHASIA BERSAMA ANDA DAN PASANGAN DI SINI
-      const SHARED_KEY = "kitabisa"; // Ganti dengan kunci rahasia yang lebih kuat
-
-      // =================================================================
-      //                     KODE APLIKASI
-      // =================================================================
-
-      // Inisialisasi Firebase
-      const app = firebase.initializeApp(firebaseConfig);
-      const db = firebase.firestore();
-
+      // Call createStars when DOM is loaded
       document.addEventListener("DOMContentLoaded", () => {
-        // === PEMILIHAN ELEMEN DOM (Tidak ada perubahan) ===
+        createStars();
+        
+        // === PEMILIHAN ELEMEN DOM ===
         const lockScreen = document.getElementById("lock-screen");
         const passwordInput = document.getElementById("password-input");
         const unlockButton = document.getElementById("unlock-button");
@@ -621,7 +864,29 @@
         const proofInput = document.getElementById("proof-input");
         const submitButton = document.getElementById("submit-button");
 
-        // === FUNGSI-FUNGSI LOGIKA (Tidak ada perubahan) ===
+        // === KONFIGURASI FIREBASE ===
+        const firebaseConfig = {
+          apiKey: "AIzaSyCTknZNCMA5O_4zVh34X6ipL9a_PM10W8A",
+          authDomain: "tabunganmasadepan-f5281.firebaseapp.com",
+          projectId: "tabunganmasadepan-f5281",
+          storageBucket: "tabunganmasadepan-f5281.firebasestorage.app",
+          messagingSenderId: "840218167094",
+          appId: "1:840218167094:web:3490fe88a27b0793f19597",
+          measurementId: "G-PXQXPENWHH",
+        };
+
+        const CLOUDINARY_CONFIG = {
+          cloudName: "dzoxyqyrl",
+          uploadPreset: "bukti_tabungan",
+        };
+
+        const SHARED_KEY = "kitabisa";
+
+        // Inisialisasi Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // === FUNGSI-FUNGSI LOGIKA ===
         let currentGoal = 100000000;
         let allTransactions = [];
         let contributionChart;
@@ -632,7 +897,6 @@
             minimumFractionDigits: 0,
           }).format(amount);
         const renderDashboard = () => {
-          /* ... (fungsi ini tetap sama persis) ... */
           const totalSaved = allTransactions.reduce(
             (sum, t) => sum + t.amount,
             0
@@ -663,7 +927,6 @@
           renderHistory();
         };
         const updateChart = (dhanuTotal, mahaTotal) => {
-          /* ... (fungsi ini tetap sama persis) ... */
           const data = {
             labels: ["Dhanu", "Maha"],
             datasets: [
@@ -692,7 +955,6 @@
           }
         };
         const renderHistory = () => {
-          /* ... (fungsi ini tetap sama persis) ... */
           historyList.innerHTML = "";
           if (allTransactions.length === 0) {
             historyList.innerHTML = `<li class="history-item">Belum ada tabungan. Mulai sekarang!</li>`;
@@ -723,12 +985,11 @@
               t.amount
             )}</span> ${proofLink} <button class="delete-btn" data-id="${
               t.id
-            }" title="Hapus">&times;</button>`;
+            }" title="Hapus">×</button>`;
             historyList.appendChild(item);
           });
         };
         const setupRealtimeListeners = () => {
-          /* ... (fungsi ini tetap sama persis) ... */
           db.collection("transactions").onSnapshot((snapshot) => {
             allTransactions = snapshot.docs.map((doc) => ({
               id: doc.id,
@@ -750,7 +1011,6 @@
             });
         };
         const handleUnlock = () => {
-          /* ... (fungsi ini tetap sama persis) ... */
           if (passwordInput.value === SHARED_KEY) {
             lockScreen.style.display = "none";
             appContainer.classList.remove("hidden");
@@ -760,7 +1020,7 @@
           }
         };
 
-        // === EVENT LISTENERS (hanya logika submit form yang berubah) ===
+        // === EVENT LISTENERS ===
         unlockButton.addEventListener("click", handleUnlock);
         passwordInput.addEventListener("keypress", (e) => {
           if (e.key === "Enter") handleUnlock();
@@ -783,7 +1043,6 @@
           if (e.target == modal) modal.style.display = "none";
         });
 
-        // === PERBAIKAN UTAMA: Logika Submit Transaksi dengan Upload ke Cloudinary ===
         transactionForm.addEventListener("submit", async (e) => {
           e.preventDefault();
 
@@ -804,7 +1063,6 @@
 
           let proofUrl = null;
 
-          // Jika ada file bukti yang diupload, proses ke Cloudinary
           if (proofFile) {
             submitButton.textContent = "Mengunggah Bukti...";
             const formData = new FormData();
@@ -822,7 +1080,7 @@
 
               if (response.ok) {
                 const result = await response.json();
-                proofUrl = result.secure_url; // Dapatkan URL aman dari Cloudinary
+                proofUrl = result.secure_url;
                 console.log("Upload berhasil. URL:", proofUrl);
               } else {
                 const errorResult = await response.json();
@@ -843,7 +1101,7 @@
             await db.collection("transactions").add({
               amount,
               description,
-              proofUrl, // Simpan URL dari Cloudinary (atau null jika tidak ada)
+              proofUrl,
               category: categoryInput.value,
               who: contributor,
               date: firebase.firestore.FieldValue.serverTimestamp(),
@@ -860,7 +1118,6 @@
         });
 
         historyList.addEventListener("click", (e) => {
-          /* ... (fungsi ini tetap sama persis) ... */
           if (e.target.classList.contains("delete-btn")) {
             const transactionId = e.target.dataset.id;
             if (confirm("Yakin ingin menghapus tabungan ini?")) {
