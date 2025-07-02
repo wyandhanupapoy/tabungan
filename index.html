@@ -2,16 +2,17 @@
 <html lang="id">
   <style>
     :root {
-      --primary-color: #6a11cb;
-      --secondary-color: #2575fc;
-      --background-color: #f0f2f5;
+      --primary-color: #5a09b1;
+      --secondary-color: #1e6bf1;
+      --background-color: #f4f6fa;
       --card-background: #ffffff;
-      --text-color: #2d2d2d;
-      --text-light: #5c5c5c;
-      --border-color: #e0e0e0;
-      --shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-      --border-radius: 20px;
-      --star-color: #ffd700;
+      --text-color: #1a1a1a;
+      --text-light: #4a4a4a;
+      --border-color: #d5d7db;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      --border-radius: 24px;
+      --star-color: #ffe066;
+      --glow-color: rgba(106, 17, 203, 0.3);
     }
 
     * {
@@ -21,16 +22,17 @@
     }
 
     body {
-      font-family: "Poppins", sans-serif;
-      background: linear-gradient(135deg, #f0f2f5 0%, #e8e9ff 100%);
+      font-family: "Inter", sans-serif;
+      background: linear-gradient(135deg, var(--background-color) 0%, #e8ecff 100%);
       color: var(--text-color);
-      line-height: 1.6;
+      line-height: 1.7;
       position: relative;
       overflow-x: hidden;
+      min-height: 100vh;
     }
 
-    /* Falling Stars Animation */
-    .stars {
+    /* Particle Animation */
+    .particles {
       position: fixed;
       top: 0;
       left: 0;
@@ -40,24 +42,28 @@
       z-index: 0;
     }
 
-    .star {
+    .particle {
       position: absolute;
       background: var(--star-color);
-      width: 2px;
-      height: 2px;
+      width: 3px;
+      height: 3px;
       border-radius: 50%;
-      opacity: 0.8;
-      animation: fall 3s linear infinite;
+      opacity: 0.7;
+      animation: float 5s ease-in-out infinite;
     }
 
-    @keyframes fall {
+    @keyframes float {
       0% {
-        transform: translateY(-100vh) rotate(0deg);
-        opacity: 0.8;
+        transform: translateY(0) scale(1);
+        opacity: 0.7;
+      }
+      50% {
+        transform: translateY(-20vh) scale(1.2);
+        opacity: 0.3;
       }
       100% {
-        transform: translateY(100vh) rotate(360deg);
-        opacity: 0;
+        transform: translateY(0) scale(1);
+        opacity: 0.7;
       }
     }
 
@@ -68,77 +74,100 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(50, 50, 100, 0.7));
-      backdrop-filter: blur(12px);
+      background: linear-gradient(135deg, rgba(0, 0, 0, 0.85), rgba(30, 107, 241, 0.7));
+      backdrop-filter: blur(15px);
       display: flex;
       justify-content: center;
       align-items: center;
       z-index: 1000;
-      animation: fadeIn 1s ease-in;
+      animation: fadeIn 0.8s ease-in;
     }
 
     .lock-box {
       background: var(--card-background);
-      padding: 48px;
+      padding: clamp(24px, 5vw, 40px);
       border-radius: var(--border-radius);
       text-align: center;
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
-      transform: scale(0.95);
-      animation: popIn 0.5s ease-out forwards;
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+      transform: scale(0.9);
+      animation: popIn 0.6s ease-out forwards;
+      max-width: 90%;
+      width: 400px;
     }
 
     .lock-box h2 {
-      color: var(--primary-color);
-      font-size: 2rem;
-      margin-bottom: 20px;
+      font-size: clamp(1.8rem, 5vw, 2.2rem);
+      margin-bottom: 1.5rem;
       background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
     .lock-box input {
-      display: block;
       width: 100%;
-      margin: 20px 0;
-      padding: 14px;
+      margin: 1.5rem 0;
+      padding: clamp(10px, 2vw, 12px);
       border: 1px solid var(--border-color);
-      border-radius: 10px;
-      font-size: 1rem;
-      background: #f9f9f9;
-      transition: border-color 0.3s ease, transform 0.3s ease;
+      border-radius: 12px;
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
+      background: #fafafa;
+      transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .lock-box input:focus {
       border-color: var(--primary-color);
-      transform: scale(1.02);
+      transform: scale(1.03);
+      box-shadow: 0 0 10px var(--glow-color);
       outline: none;
     }
 
     .lock-box button {
       width: 100%;
-      padding: 14px;
+      padding: clamp(12px, 2.5vw, 14px);
       background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
       color: white;
       border: none;
-      border-radius: 10px;
+      border-radius: 12px;
       cursor: pointer;
       font-weight: 600;
-      font-size: 1.1rem;
+      font-size: clamp(1rem, 2.5vw, 1.1rem);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden;
     }
 
     .lock-box button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .lock-box button::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+      );
+      transition: left 0.5s ease;
+    }
+
+    .lock-box button:hover::after {
+      left: 100%;
     }
 
     .app-container {
-      max-width: 900px;
-      margin: 40px auto;
-      padding: 30px;
+      max-width: clamp(320px, 90vw, 1000px);
+      margin: clamp(20px, 5vw, 50px) auto;
+      padding: clamp(15px, 4vw, 30px);
       display: grid;
-      gap: 30px;
-      animation: fadeInUp 0.8s ease-out;
+      gap: clamp(20px, 4vw, 35px);
+      animation: fadeInUp 1s ease-out;
       position: relative;
       z-index: 1;
     }
@@ -150,67 +179,67 @@
     .card {
       background: var(--card-background);
       border-radius: var(--border-radius);
-      padding: 30px;
+      padding: clamp(20px, 4vw, 35px);
       box-shadow: var(--shadow);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
     }
 
     .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+      transform: translateY(-6px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
     }
 
     .app-header {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: clamp(15px, 3vw, 25px);
     }
 
     .app-header h1 {
-      font-size: 3rem;
+      font-size: clamp(2rem, 6vw, 3.5rem);
       font-weight: 700;
       background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      animation: pulseText 2s infinite;
+      animation: glowText 3s ease-in-out infinite;
     }
 
     .app-header p {
       color: var(--text-light);
-      font-size: 1.2rem;
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
     }
 
-    @keyframes pulseText {
-      0% { opacity: 1; }
-      50% { opacity: 0.7; }
-      100% { opacity: 1; }
+    @keyframes glowText {
+      0%, 100% { text-shadow: 0 0 10px var(--glow-color); }
+      50% { text-shadow: 0 0 20px var(--glow-color), 0 0 30px var(--glow-color); }
     }
 
     /* Summary & Goal */
     #goal-input {
       width: 100%;
-      padding: 14px;
+      padding: clamp(10px, 2.5vw, 14px);
       border: 1px solid var(--border-color);
-      border-radius: 10px;
-      font-size: 1.3rem;
+      border-radius: 12px;
+      font-size: clamp(1.1rem, 3vw, 1.4rem);
       text-align: center;
       font-weight: 600;
-      margin-bottom: 25px;
-      background: #f9f9f9;
-      transition: border-color 0.3s ease, transform 0.3s ease;
+      margin-bottom: clamp(15px, 3vw, 25px);
+      background: #fafafa;
+      transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     #goal-input:focus {
       border-color: var(--primary-color);
-      transform: scale(1.02);
+      transform: scale(1.03);
+      box-shadow: 0 0 10px var(--glow-color);
       outline: none;
     }
 
     .progress-container {
-      background-color: #e9ecef;
-      border-radius: 25px;
-      height: 25px;
+      background-color: #e0e4e8;
+      border-radius: 30px;
+      height: clamp(20px, 4vw, 30px);
       width: 100%;
-      margin-bottom: 25px;
+      margin-bottom: clamp(15px, 3vw, 25px);
       overflow: hidden;
       position: relative;
     }
@@ -219,8 +248,8 @@
       height: 100%;
       width: 0%;
       background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
-      border-radius: 25px;
-      transition: width 0.6s ease-in-out;
+      border-radius: 30px;
+      transition: width 0.7s ease-in-out;
       position: relative;
       overflow: hidden;
     }
@@ -234,38 +263,38 @@
       height: 100%;
       background: linear-gradient(
         45deg,
-        rgba(255, 255, 255, 0.2) 25%,
+        rgba(255, 255, 255, 0.3) 25%,
         transparent 25%,
         transparent 50%,
-        rgba(255, 255, 255, 0.2) 50%,
-        rgba(255, 255, 255, 0.2) 75%,
+        rgba(255, 255, 255, 0.3) 50%,
+        rgba(255, 255, 255, 0.3) 75%,
         transparent 75%,
         transparent
       );
-      background-size: 30px 30px;
-      animation: moveStripes 2s linear infinite;
+      background-size: 40px 40px;
+      animation: moveStripes 1.5s linear infinite;
     }
 
     @keyframes moveStripes {
       0% { background-position: 0 0; }
-      100% { background-position: 60px 0; }
+      100% { background-position: 80px 0; }
     }
 
     .summary-details {
       display: flex;
       justify-content: space-between;
       text-align: center;
+      gap: clamp(10px, 2vw, 20px);
     }
 
     .summary-details span {
-      font-size: 0.95rem;
+      font-size: clamp(0.85rem, 2vw, 1rem);
       color: var(--text-light);
     }
 
     .summary-details strong {
-      font-size: 1.8rem;
+      font-size: clamp(1.5rem, 4vw, 2rem);
       font-weight: 700;
-      color: var(--primary-color);
       background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -275,46 +304,48 @@
     .analytics-content {
       display: flex;
       align-items: center;
-      gap: 25px;
+      gap: clamp(15px, 3vw, 25px);
+      flex-wrap: wrap;
     }
 
     .chart-container {
-      width: 170px;
-      height: 170px;
-      position: relative;
-      animation: rotateIn 1s ease-out;
+      width: clamp(140px, 30vw, 180px);
+      height: clamp(140px, 30vw, 180px);
+      animation: rotateIn 1.2s ease-out;
     }
 
     @keyframes rotateIn {
-      from { transform: rotate(-10deg) scale(0.8); opacity: 0; }
+      from { transform: rotate(-15deg) scale(0.7); opacity: 0; }
       to { transform: rotate(0deg) scale(1); opacity: 1; }
     }
 
     .stats-container {
       flex-grow: 1;
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: clamp(10px, 2vw, 15px);
     }
 
     .stat-item {
-      padding: 10px;
-      border-radius: 10px;
-      background: #f9f9f9;
-      transition: transform 0.3s ease;
+      padding: clamp(8px, 2vw, 12px);
+      border-radius: 12px;
+      background: #fafafa;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-align: center;
     }
 
     .stat-item:hover {
-      transform: scale(1.05);
+      transform: scale(1.06);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     }
 
     .stat-item span {
-      font-size: 0.95rem;
+      font-size: clamp(0.85rem, 2vw, 0.95rem);
       color: var(--text-light);
     }
 
     .stat-item strong {
-      font-size: 1.3rem;
+      font-size: clamp(1.1rem, 2.5vw, 1.3rem);
       font-weight: 600;
       display: block;
       background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
@@ -325,12 +356,12 @@
     /* Main Actions */
     .btn-primary {
       width: 100%;
-      padding: 18px;
+      padding: clamp(12px, 3vw, 16px);
       background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
       color: white;
       border: none;
-      border-radius: 10px;
-      font-size: 1.2rem;
+      border-radius: 12px;
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
       font-weight: 600;
       cursor: pointer;
       transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
@@ -339,8 +370,8 @@
     }
 
     .btn-primary:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
       background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
     }
 
@@ -350,36 +381,36 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 2rem;
+      font-size: 2.5rem;
       opacity: 0;
       transition: opacity 0.3s ease;
     }
 
     .btn-primary:hover::after {
-      opacity: 0.3;
+      opacity: 0.2;
     }
 
     /* History */
     #history-list {
       list-style-type: none;
-      max-height: 450px;
+      max-height: clamp(300px, 50vh, 500px);
       overflow-y: auto;
-      padding-right: 10px;
+      padding-right: clamp(5px, 1vw, 10px);
     }
 
     .history-item {
       display: flex;
       align-items: center;
-      padding: 18px 12px;
+      padding: clamp(12px, 2.5vw, 15px);
       border-bottom: 1px solid var(--border-color);
       transition: background 0.3s ease, transform 0.3s ease;
-      border-radius: 10px;
+      border-radius: 12px;
       margin-bottom: 10px;
     }
 
     .history-item:hover {
-      background: #f9f9f9;
-      transform: translateX(5px);
+      background: #f5f7fa;
+      transform: translateX(8px);
     }
 
     .history-item:last-child {
@@ -387,15 +418,14 @@
     }
 
     .history-item-icon {
-      font-size: 1.8rem;
-      margin-right: 20px;
-      animation: bounce 2s infinite;
+      font-size: clamp(1.5rem, 4vw, 1.8rem);
+      margin-right: clamp(10px, 2vw, 15px);
+      animation: pulseIcon 2s ease-in-out infinite;
     }
 
-    @keyframes bounce {
-      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-      40% { transform: translateY(-10px); }
-      60% { transform: translateY(-5px); }
+    @keyframes pulseIcon {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
     }
 
     .history-item-details {
@@ -404,17 +434,17 @@
 
     .history-item-desc {
       font-weight: 600;
-      font-size: 1.1rem;
+      font-size: clamp(0.95rem, 2.5vw, 1.1rem);
     }
 
     .history-item-meta {
-      font-size: 0.85rem;
+      font-size: clamp(0.75rem, 2vw, 0.85rem);
       color: var(--text-light);
     }
 
     .history-item-amount {
       font-weight: 700;
-      font-size: 1.2rem;
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
     }
 
     .Dhanu .history-item-amount {
@@ -428,34 +458,34 @@
     .delete-btn {
       background: transparent;
       border: none;
-      color: #ff6b6b;
-      font-size: 1.3rem;
+      color: #ff4d4d;
+      font-size: clamp(1.1rem, 2.5vw, 1.3rem);
       cursor: pointer;
-      margin-left: 20px;
+      margin-left: clamp(10px, 2vw, 15px);
       opacity: 0;
       transition: opacity 0.3s ease, transform 0.3s ease;
     }
 
     .history-item:hover .delete-btn {
       opacity: 1;
-      transform: scale(1.2);
+      transform: scale(1.3);
     }
 
     .proof-link {
-      background-color: #e7f3ff;
-      color: #0d6efd;
-      padding: 6px 12px;
+      background-color: #e6f0ff;
+      color: #0a58ca;
+      padding: clamp(5px, 1.5vw, 8px) clamp(8px, 2vw, 12px);
       border-radius: 20px;
-      font-size: 0.8rem;
+      font-size: clamp(0.7rem, 2vw, 0.85rem);
       text-decoration: none;
       font-weight: 600;
-      margin-left: 12px;
+      margin-left: clamp(8px, 2vw, 12px);
       transition: background 0.3s ease, transform 0.3s ease;
     }
 
     .proof-link:hover {
-      background-color: #cce3ff;
-      transform: scale(1.05);
+      background-color: #d1e4ff;
+      transform: scale(1.1);
     }
 
     /* Modal */
@@ -468,30 +498,29 @@
       width: 100%;
       height: 100%;
       overflow: auto;
-      background-color: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(8px);
-      animation: fadeIn 0.5s ease;
+      background-color: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(10px);
+      animation: fadeIn 0.6s ease;
     }
 
     .modal-content {
       background-color: var(--card-background);
-      margin: 10% auto;
-      padding: 35px;
+      margin: clamp(10%, 15vh, 15%) auto;
+      padding: clamp(20px, 4vw, 40px);
       border: 1px solid var(--border-color);
-      width: 90%;
-      max-width: 550px;
+      width: clamp(280px, 90vw, 600px);
       border-radius: var(--border-radius);
       position: relative;
-      animation: slideIn 0.5s ease-out;
+      animation: slideIn 0.6s ease-out;
       box-shadow: var(--shadow);
     }
 
     .close-button {
       color: var(--text-light);
       position: absolute;
-      top: 15px;
-      right: 20px;
-      font-size: 32px;
+      top: clamp(10px, 2vw, 15px);
+      right: clamp(15px, 2.5vw, 20px);
+      font-size: clamp(1.5rem, 4vw, 2rem);
       font-weight: bold;
       cursor: pointer;
       transition: color 0.3s ease, transform 0.3s ease;
@@ -499,12 +528,12 @@
 
     .close-button:hover {
       color: var(--primary-color);
-      transform: rotate(90deg);
+      transform: rotate(180deg);
     }
 
     @keyframes slideIn {
       from {
-        transform: translateY(-100px);
+        transform: translateY(-150px);
         opacity: 0;
       }
       to {
@@ -521,7 +550,7 @@
     @keyframes fadeInUp {
       from {
         opacity: 0;
-        transform: translateY(50px);
+        transform: translateY(70px);
       }
       to {
         opacity: 1;
@@ -531,7 +560,7 @@
 
     @keyframes popIn {
       from {
-        transform: scale(0.8);
+        transform: scale(0.7);
         opacity: 0;
       }
       to {
@@ -542,12 +571,12 @@
 
     /* Form inside Modal */
     .form-group {
-      margin-bottom: 25px;
+      margin-bottom: clamp(15px, 3vw, 25px);
     }
 
     .form-group label {
       display: block;
-      margin-bottom: 10px;
+      margin-bottom: clamp(6px, 1.5vw, 10px);
       font-weight: 600;
       color: var(--text-color);
     }
@@ -555,37 +584,42 @@
     .form-group input,
     .form-group select {
       width: 100%;
-      padding: 14px;
-      border-radius: 10px;
+      padding: clamp(10px, 2.5vw, 14px);
+      border-radius: 12px;
       border: 1px solid var(--border-color);
-      font-size: 1rem;
-      font-family: "Poppins", sans-serif;
-      background: #f9f9f9;
-      transition: border-color 0.3s ease, transform 0.3s ease;
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
+      font-family: "Inter", sans-serif;
+      background: #fafafa;
+      transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .form-group input:focus,
     .form-group select:focus {
       border-color: var(--primary-color);
-      transform: scale(1.02);
+      transform: scale(1.03);
+      box-shadow: 0 0 10px var(--glow-color);
       outline: none;
+    }
+
+    .form-group input:invalid:not(:placeholder-shown) {
+      border-color: #ff4d4d;
     }
 
     .file-input {
       width: 100%;
-      padding: 12px;
+      padding: clamp(10px, 2.5vw, 12px);
       border: 1px dashed var(--border-color);
-      border-radius: 10px;
+      border-radius: 12px;
       cursor: pointer;
-      background: #f9f9f9;
+      background: #fafafa;
     }
 
     .file-input::file-selector-button {
-      margin-right: 12px;
+      margin-right: clamp(8px, 2vw, 12px);
       border: none;
       background: var(--primary-color);
-      padding: 10px 14px;
-      border-radius: 6px;
+      padding: clamp(8px, 2vw, 10px) clamp(10px, 2.5vw, 14px);
+      border-radius: 8px;
       color: #fff;
       cursor: pointer;
       transition: background 0.3s ease, transform 0.3s ease;
@@ -598,7 +632,7 @@
 
     .contributor-selector .radio-group {
       display: flex;
-      gap: 15px;
+      gap: clamp(10px, 2vw, 15px);
     }
 
     .contributor-selector input[type="radio"] {
@@ -608,9 +642,9 @@
     .contributor-selector label {
       flex: 1;
       text-align: center;
-      padding: 12px;
+      padding: clamp(10px, 2.5vw, 12px);
       border: 2px solid var(--border-color);
-      border-radius: 10px;
+      border-radius: 12px;
       cursor: pointer;
       transition: all 0.3s ease;
       font-weight: 600;
@@ -630,23 +664,88 @@
       transform: scale(1.05);
     }
 
-    @media (max-width: 600px) {
+    /* Loading State */
+    .loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1100;
+    }
+
+    .loading-spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid var(--border-color);
+      border-top: 5px solid var(--primary-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .app-container {
+        padding: 15px;
+        margin: 20px auto;
+      }
       .analytics-content {
         flex-direction: column;
+        align-items: center;
       }
       .stats-container {
-        width: 100%;
         grid-template-columns: 1fr;
       }
       .modal-content {
         margin: 20% auto;
         padding: 20px;
+        width: 95%;
       }
       .lock-box {
-        padding: 30px;
+        padding: 20px;
+        width: 90%;
       }
       .app-header h1 {
-        font-size: 2.2rem;
+        font-size: 2.5rem;
+      }
+      .card {
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .app-header h1 {
+        font-size: 2rem;
+      }
+      .summary-details {
+        flex-direction: column;
+        gap: 15px;
+      }
+      .lock-box h2 {
+        font-size: 1.6rem;
+      }
+      .btn-primary {
+        padding: 10px;
+        font-size: 1rem;
+      }
+      .history-item {
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .history-item-amount,
+      .proof-link {
+        margin-left: 0;
+        width: 100%;
+        text-align: right;
       }
     }
   </style>
@@ -657,13 +756,16 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap"
       rel="stylesheet"
     />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
   <body>
-    <div class="stars" id="stars"></div>
+    <div class="particles" id="particles"></div>
+    <div class="loading" id="loading">
+      <div class="loading-spinner"></div>
+    </div>
     <div id="lock-screen" class="lock-screen">
       <div class="lock-box">
         <h2>🔐 Tabungan Impian</h2>
@@ -672,6 +774,7 @@
           type="password"
           id="password-input"
           placeholder="Kunci Rahasia"
+          required
         />
         <button id="unlock-button">Buka</button>
       </div>
@@ -690,6 +793,8 @@
             type="number"
             id="goal-input"
             placeholder="Contoh: 100000000"
+            min="1000"
+            required
           />
         </div>
         <div class="progress-container">
@@ -757,6 +862,7 @@
               type="number"
               id="amount"
               placeholder="Contoh: 100000"
+              min="1000"
               required
             />
           </div>
@@ -766,6 +872,8 @@
               type="text"
               id="description"
               placeholder="Gaji bulan ini, bonus, dll."
+              minlength="3"
+              maxlength="100"
               required
             />
           </div>
@@ -818,23 +926,41 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <script>
-      // Falling Stars Animation
-      function createStars() {
-        const starsContainer = document.getElementById('stars');
-        for (let i = 0; i < 50; i++) {
-          const star = document.createElement('div');
-          star.className = 'star';
-          star.style.left = `${Math.random() * 100}vw`;
-          star.style.animationDelay = `${Math.random() * 5}s`;
-          star.style.animationDuration = `${2 + Math.random() * 3}s`;
-          starsContainer.appendChild(star);
+      // Particle Animation
+      function createParticles() {
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 30; i++) {
+          const particle = document.createElement('div');
+          particle.className = 'particle';
+          particle.style.left = `${Math.random() * 100}vw`;
+          particle.style.animationDelay = `${Math.random() * 4}s`;
+          particle.style.animationDuration = `${3 + Math.random() * 3}s`;
+          particlesContainer.appendChild(particle);
         }
       }
 
-      // Call createStars when DOM is loaded
+      // Local Storage Helper Functions
+      function saveToLocalStorage(key, data) {
+        try {
+          localStorage.setItem(key, JSON.stringify(data));
+        } catch (e) {
+          console.warn('Local storage failed:', e);
+        }
+      }
+
+      function getFromLocalStorage(key) {
+        try {
+          const data = localStorage.getItem(key);
+          return data ? JSON.parse(data) : null;
+        } catch (e) {
+          console.warn('Local storage read failed:', e);
+          return null;
+        }
+      }
+
       document.addEventListener("DOMContentLoaded", () => {
-        createStars();
-        
+        createParticles();
+
         // === PEMILIHAN ELEMEN DOM ===
         const lockScreen = document.getElementById("lock-screen");
         const passwordInput = document.getElementById("password-input");
@@ -844,17 +970,13 @@
         const progressBar = document.getElementById("progress-bar");
         const totalSavedEl = document.getElementById("total-saved");
         const goalRemainingEl = document.getElementById("goal-remaining");
-        const contributionChartCanvas =
-          document.getElementById("contribution-chart");
+        const contributionChartCanvas = document.getElementById("contribution-chart");
         const person1TotalEl = document.getElementById("person1-total");
         const person2TotalEl = document.getElementById("person2-total");
-        const totalTransactionsEl =
-          document.getElementById("total-transactions");
+        const totalTransactionsEl = document.getElementById("total-transactions");
         const averageSavingEl = document.getElementById("average-saving");
         const historyList = document.getElementById("history-list");
-        const addTransactionBtn = document.getElementById(
-          "add-transaction-btn"
-        );
+        const addTransactionBtn = document.getElementById("add-transaction-btn");
         const modal = document.getElementById("transaction-modal");
         const closeModalBtn = document.querySelector(".close-button");
         const transactionForm = document.getElementById("transaction-form");
@@ -863,8 +985,9 @@
         const categoryInput = document.getElementById("category");
         const proofInput = document.getElementById("proof-input");
         const submitButton = document.getElementById("submit-button");
+        const loading = document.getElementById("loading");
 
-        // === KONFIGURASI FIREBASE ===
+        // === KONFIGURASI ===
         const firebaseConfig = {
           apiKey: "AIzaSyCTknZNCMA5O_4zVh34X6ipL9a_PM10W8A",
           authDomain: "tabunganmasadepan-f5281.firebaseapp.com",
@@ -882,13 +1005,19 @@
 
         const SHARED_KEY = "kitabisa";
 
-        // Inisialisasi Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+        // Initialize Firebase
+        let db;
+        try {
+          const app = firebase.initializeApp(firebaseConfig);
+          db = firebase.firestore();
+        } catch (e) {
+          console.warn('Firebase initialization failed:', e);
+          alert('Koneksi ke server gagal. Menggunakan mode offline.');
+        }
 
-        // === FUNGSI-FUNGSI LOGIKA ===
-        let currentGoal = 100000000;
-        let allTransactions = [];
+        // === STATE ===
+        let currentGoal = getFromLocalStorage('mainGoal')?.amount || 100000000;
+        let allTransactions = getFromLocalStorage('transactions') || [];
         let contributionChart;
         const formatCurrency = (amount) =>
           new Intl.NumberFormat("id-ID", {
@@ -896,11 +1025,10 @@
             currency: "IDR",
             minimumFractionDigits: 0,
           }).format(amount);
+
+        // === CORE FUNCTIONS ===
         const renderDashboard = () => {
-          const totalSaved = allTransactions.reduce(
-            (sum, t) => sum + t.amount,
-            0
-          );
+          const totalSaved = allTransactions.reduce((sum, t) => sum + t.amount, 0);
           const dhanuTotal = allTransactions
             .filter((t) => t.who === "Dhanu")
             .reduce((sum, t) => sum + t.amount, 0);
@@ -910,11 +1038,10 @@
           const goalRemaining = currentGoal - totalSaved;
           const progressPercentage =
             totalSaved >= currentGoal ? 100 : (totalSaved / currentGoal) * 100;
+
           goalInput.value = currentGoal;
           totalSavedEl.textContent = formatCurrency(totalSaved);
-          goalRemainingEl.textContent = formatCurrency(
-            goalRemaining > 0 ? goalRemaining : 0
-          );
+          goalRemainingEl.textContent = formatCurrency(goalRemaining > 0 ? goalRemaining : 0);
           progressBar.style.width = `${progressPercentage}%`;
           person1TotalEl.textContent = formatCurrency(dhanuTotal);
           person2TotalEl.textContent = formatCurrency(mahaTotal);
@@ -923,16 +1050,20 @@
             allTransactions.length > 0
               ? formatCurrency(totalSaved / allTransactions.length)
               : formatCurrency(0);
+
           updateChart(dhanuTotal, mahaTotal);
           renderHistory();
+          saveToLocalStorage('transactions', allTransactions);
+          saveToLocalStorage('mainGoal', { amount: currentGoal });
         };
+
         const updateChart = (dhanuTotal, mahaTotal) => {
           const data = {
             labels: ["Dhanu", "Maha"],
             datasets: [
               {
                 data: [dhanuTotal, mahaTotal],
-                backgroundColor: ["#6a11cb", "#2575fc"],
+                backgroundColor: ["#5a09b1", "#1e6bf1"],
                 borderColor: "#ffffff",
                 borderWidth: 2,
               },
@@ -949,11 +1080,16 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: { legend: { display: false } },
-                cutout: "70%",
+                cutout: "75%",
+                animation: {
+                  animateScale: true,
+                  animateRotate: true,
+                },
               },
             });
           }
         };
+
         const renderHistory = () => {
           historyList.innerHTML = "";
           if (allTransactions.length === 0) {
@@ -961,18 +1097,22 @@
             return;
           }
           const sorted = [...allTransactions].sort(
-            (a, b) => b.date.seconds - a.date.seconds
+            (a, b) => (b.date?.seconds || b.date) - (a.date?.seconds || a.date)
           );
           sorted.forEach((t) => {
             const item = document.createElement("li");
             item.className = `history-item ${t.who}`;
-            const formattedDate = new Date(
-              t.date.seconds * 1000
-            ).toLocaleDateString("id-ID", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric",
-            });
+            const formattedDate = t.date.seconds
+              ? new Date(t.date.seconds * 1000).toLocaleDateString("id-ID", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
+                })
+              : new Date(t.date).toLocaleDateString("id-ID", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
+                });
             const icon = t.who === "Dhanu" ? "🙋‍♂️" : "🙋‍♀️";
             const proofLink = t.proofUrl
               ? `<a href="${t.proofUrl}" target="_blank" class="proof-link">Lihat Bukti</a>`
@@ -989,27 +1129,45 @@
             historyList.appendChild(item);
           });
         };
+
         const setupRealtimeListeners = () => {
-          db.collection("transactions").onSnapshot((snapshot) => {
-            allTransactions = snapshot.docs.map((doc) => ({
-              id: doc.id,
-              ...doc.data(),
-            }));
+          if (!db) {
             renderDashboard();
-          });
+            return;
+          }
+          db.collection("transactions").onSnapshot(
+            (snapshot) => {
+              allTransactions = snapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+              }));
+              renderDashboard();
+            },
+            (error) => {
+              console.warn('Firestore snapshot error:', error);
+              renderDashboard();
+            }
+          );
           db.collection("settings")
             .doc("mainGoal")
-            .onSnapshot((doc) => {
-              if (doc.exists) {
-                currentGoal = doc.data().amount;
+            .onSnapshot(
+              (doc) => {
+                if (doc.exists) {
+                  currentGoal = doc.data().amount;
+                  renderDashboard();
+                } else {
+                  db.collection("settings")
+                    .doc("mainGoal")
+                    .set({ amount: currentGoal });
+                }
+              },
+              (error) => {
+                console.warn('Settings snapshot error:', error);
                 renderDashboard();
-              } else {
-                db.collection("settings")
-                  .doc("mainGoal")
-                  .set({ amount: currentGoal });
               }
-            });
+            );
         };
+
         const handleUnlock = () => {
           if (passwordInput.value === SHARED_KEY) {
             lockScreen.style.display = "none";
@@ -1017,6 +1175,8 @@
             setupRealtimeListeners();
           } else {
             alert("Kunci rahasia salah!");
+            passwordInput.classList.add('invalid');
+            setTimeout(() => passwordInput.classList.remove('invalid'), 500);
           }
         };
 
@@ -1025,22 +1185,35 @@
         passwordInput.addEventListener("keypress", (e) => {
           if (e.key === "Enter") handleUnlock();
         });
+
         goalInput.addEventListener("change", (e) => {
           const newGoal = parseFloat(e.target.value);
-          if (!isNaN(newGoal) && newGoal > 0) {
-            db.collection("settings").doc("mainGoal").set({ amount: newGoal });
+          if (!isNaN(newGoal) && newGoal >= 1000) {
+            currentGoal = newGoal;
+            if (db) {
+              db.collection("settings").doc("mainGoal").set({ amount: newGoal });
+            }
+            renderDashboard();
+          } else {
+            alert("Target harus minimal Rp 1.000!");
+            goalInput.value = currentGoal;
           }
         });
-        addTransactionBtn.addEventListener(
-          "click",
-          () => (modal.style.display = "block")
-        );
-        closeModalBtn.addEventListener(
-          "click",
-          () => (modal.style.display = "none")
-        );
+
+        addTransactionBtn.addEventListener("click", () => {
+          modal.style.display = "block";
+        });
+
+        closeModalBtn.addEventListener("click", () => {
+          modal.style.display = "none";
+          transactionForm.reset();
+        });
+
         window.addEventListener("click", (e) => {
-          if (e.target == modal) modal.style.display = "none";
+          if (e.target == modal) {
+            modal.style.display = "none";
+            transactionForm.reset();
+          }
         });
 
         transactionForm.addEventListener("submit", async (e) => {
@@ -1053,13 +1226,18 @@
           ).value;
           const proofFile = proofInput.files[0];
 
-          if (isNaN(amount) || amount <= 0 || description === "") {
-            alert("Mohon isi semua data dengan benar.");
+          if (isNaN(amount) || amount < 1000) {
+            alert("Jumlah minimal Rp 1.000!");
+            return;
+          }
+          if (description.length < 3) {
+            alert("Deskripsi minimal 3 karakter!");
             return;
           }
 
           submitButton.disabled = true;
           submitButton.textContent = "Memproses...";
+          loading.style.display = "flex";
 
           let proofUrl = null;
 
@@ -1084,36 +1262,42 @@
                 console.log("Upload berhasil. URL:", proofUrl);
               } else {
                 const errorResult = await response.json();
-                throw new Error(
-                  `Cloudinary API Error: ${errorResult.error.message}`
-                );
+                throw new Error(`Cloudinary API Error: ${errorResult.error.message}`);
               }
             } catch (error) {
               console.error("Gagal upload gambar ke Cloudinary:", error);
-              alert(
-                `Gagal mengunggah bukti: ${error.message}. Transaksi akan disimpan tanpa bukti.`
-              );
+              alert(`Gagal mengunggah bukti: ${error.message}. Transaksi akan disimpan tanpa bukti.`);
             }
           }
 
-          submitButton.textContent = "Menyimpan...";
+          const transaction = {
+            amount,
+            description,
+            proofUrl,
+            category: categoryInput.value,
+            who: contributor,
+            date: db ? firebase.firestore.FieldValue.serverTimestamp() : new Date().getTime(),
+            id: `local_${Date.now()}_${Math.random().toString(36).slice(2)}`,
+          };
+
           try {
-            await db.collection("transactions").add({
-              amount,
-              description,
-              proofUrl,
-              category: categoryInput.value,
-              who: contributor,
-              date: firebase.firestore.FieldValue.serverTimestamp(),
-            });
+            if (db) {
+              const docRef = await db.collection("transactions").add(transaction);
+              transaction.id = docRef.id;
+            }
+            allTransactions.push(transaction);
+            renderDashboard();
           } catch (error) {
             console.error("Gagal menyimpan ke Firestore:", error);
-            alert("Terjadi kesalahan saat menyimpan data!");
+            alert("Terjadi kesalahan saat menyimpan data! Data disimpan secara lokal.");
+            allTransactions.push(transaction);
+            renderDashboard();
           } finally {
             transactionForm.reset();
             modal.style.display = "none";
             submitButton.disabled = false;
             submitButton.textContent = "Simpan Transaksi";
+            loading.style.display = "none";
           }
         });
 
@@ -1121,7 +1305,14 @@
           if (e.target.classList.contains("delete-btn")) {
             const transactionId = e.target.dataset.id;
             if (confirm("Yakin ingin menghapus tabungan ini?")) {
-              db.collection("transactions").doc(transactionId).delete();
+              if (db && !transactionId.startsWith('local_')) {
+                db.collection("transactions").doc(transactionId).delete().catch((error) => {
+                  console.warn('Delete failed:', error);
+                  alert('Gagal menghapus dari server, menghapus lokal.');
+                });
+              }
+              allTransactions = allTransactions.filter((t) => t.id !== transactionId);
+              renderDashboard();
             }
           }
         });
