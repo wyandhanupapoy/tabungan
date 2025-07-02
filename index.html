@@ -560,10 +560,10 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <script>
       // =================================================================
-      //                      KONFIGURASI WAJIB
+      //                     KONFIGURASI WAJIB
       // =================================================================
 
-      // PASTE KONFIGURASI FIREBASE ANDA DI SINI
+      // 1. PASTE KONFIGURASI FIREBASE ANDA DI SINI
       const firebaseConfig = {
         apiKey: "AIzaSyCTknZNCMA5O_4zVh34X6ipL9a_PM10W8A",
         authDomain: "tabunganmasadepan-f5281.firebaseapp.com",
@@ -574,19 +574,17 @@
         measurementId: "G-PXQXPENWHH",
       };
 
-      // 2. KONFIGURASI GITHUB (SANGAT TIDAK AMAN UNTUK DITARUH DI SINI)
-      const GITHUB_CONFIG = {
-        owner: "wyandhanupapoy", // Contoh: "dhanu-dev"
-        repo: "bukti-tabungan", // Contoh: "tabungan-impian"
-        // TOKEN INI AKAN TERLIHAT OLEH SEMUA ORANG. SANGAT BERBAHAYA!
-        token: "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",
+      // 2. KONFIGURASI CLOUDINARY
+      const CLOUDINARY_CONFIG = {
+        cloudName: "dzoxyqyrl", // Ganti dengan Cloud Name Anda
+        uploadPreset: "bukti_tabungan", // Ganti dengan nama Upload Preset Anda
       };
 
       // 3. UBAH KUNCI RAHASIA BERSAMA ANDA DAN PASANGAN DI SINI
-      const SHARED_KEY = "kitabisa";
+      const SHARED_KEY = "kitabisa"; // Ganti dengan kunci rahasia yang lebih kuat
 
       // =================================================================
-      //                      KODE APLIKASI (VERSI PERBAIKAN)
+      //                     KODE APLIKASI
       // =================================================================
 
       // Inisialisasi Firebase
@@ -785,7 +783,7 @@
           if (e.target == modal) modal.style.display = "none";
         });
 
-        // === PERBAIKAN UTAMA: Logika Submit Transaksi dengan Upload ke GitHub ===
+        // === PERBAIKAN UTAMA: Logika Submit Transaksi dengan Upload ke Cloudinary ===
         transactionForm.addEventListener("submit", async (e) => {
           e.preventDefault();
 
@@ -802,49 +800,38 @@
           }
 
           submitButton.disabled = true;
-          submitButton.textContent = "Mengunggah...";
+          submitButton.textContent = "Memproses...";
 
           let proofUrl = null;
 
+          // Jika ada file bukti yang diupload, proses ke Cloudinary
           if (proofFile) {
+            submitButton.textContent = "Mengunggah Bukti...";
+            const formData = new FormData();
+            formData.append("file", proofFile);
+            formData.append("upload_preset", CLOUDINARY_CONFIG.uploadPreset);
+
             try {
-              const base64Content = await new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = () => resolve(reader.result.split(",")[1]);
-                reader.onerror = (error) => reject(error);
-                reader.readAsDataURL(proofFile);
-              });
+              const response = await fetch(
+                `https://api.cloudinary.com/v1_1/${CLOUDINARY_CONFIG.cloudName}/image/upload`,
+                {
+                  method: "POST",
+                  body: formData,
+                }
+              );
 
-              const fileName = `${Date.now()}-${proofFile.name.replace(
-                /\s/g,
-                "-"
-              )}`;
-              const apiUrl = `https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/bukti/${fileName}`;
-
-              const response = await fetch(apiUrl, {
-                method: "PUT",
-                headers: {
-                  Authorization: `token ${GITHUB_CONFIG.token}`,
-                  Accept: "application/vnd.github.v3+json",
-                },
-                body: JSON.stringify({
-                  message: `Upload bukti: ${fileName}`,
-                  content: base64Content,
-                  branch: "main", // Pastikan ini nama branch utama Anda (main atau master)
-                }),
-              });
-
-              const result = await response.json();
               if (response.ok) {
-                // Gunakan URL yang bisa langsung diakses, bukan download_url
-                proofUrl = `https://raw.githubusercontent.com/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/main/bukti/${fileName}`;
+                const result = await response.json();
+                proofUrl = result.secure_url; // Dapatkan URL aman dari Cloudinary
                 console.log("Upload berhasil. URL:", proofUrl);
               } else {
-                // Beri tahu pengguna jika ada error dari GitHub
-                throw new Error(`GitHub API Error: ${result.message}`);
+                const errorResult = await response.json();
+                throw new Error(
+                  `Cloudinary API Error: ${errorResult.error.message}`
+                );
               }
             } catch (error) {
-              console.error("Gagal upload gambar ke GitHub:", error);
+              console.error("Gagal upload gambar ke Cloudinary:", error);
               alert(
                 `Gagal mengunggah bukti: ${error.message}. Transaksi akan disimpan tanpa bukti.`
               );
@@ -856,7 +843,7 @@
             await db.collection("transactions").add({
               amount,
               description,
-              proofUrl, // Simpan URL dari GitHub
+              proofUrl, // Simpan URL dari Cloudinary (atau null jika tidak ada)
               category: categoryInput.value,
               who: contributor,
               date: firebase.firestore.FieldValue.serverTimestamp(),
